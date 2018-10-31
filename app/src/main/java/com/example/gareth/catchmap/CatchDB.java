@@ -60,27 +60,41 @@ public class CatchDB {
         return catchListing;
     }
 
+    public int delete(String deleteMe){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String[] whereArgs = {deleteMe};
 
+        int count = db.delete(CatchDBHelper.TABLE_NAME, CatchDBHelper.CATCH_COLUMN_ID+" = ?", whereArgs);
+        return count;
+    }
 
+    public int updateDescription(String oldDesc, String newDesc)
+    {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(mDbHelper.CATCH_COLUMN_DESCRIPTION, newDesc);
+        String[] whereArgs = {oldDesc};
+        int count = db.update(CatchDBHelper.TABLE_NAME, values, CatchDBHelper.CATCH_COLUMN_DESCRIPTION+" = ?", whereArgs);
 
+        return count;
+    }
 
-
-
+//Add manager class for DB
 
     static class CatchDBHelper extends SQLiteOpenHelper {
 
-        public static final String TABLE_NAME = "catchDB";
-        public static final String CATCH_COLUMN_ID = "id";
-        public static final String CATCH_COLUMN_PHOTO = "photo";
-        public static final String CATCH_COLUMN_FISHTYPE = "fishType";
-        public static final String CATCH_COLUMN_FISHLENGTH = "fishLength";
-        public static final String CATCH_COLUMN_FISHWEIGHT = "fishWeight";
-        public static final String CATCH_COLUMN_DESCRIPTION = "description";
-        public static final String CATCH_COLUMN_LONGITUDE = "longitude";
-        public static final String CATCH_COLUMN_LATITUDE = "latitude";
-        public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "Catch.db";
-        public static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME+ //Code to create the database
+        private static final String TABLE_NAME = "catchDB";
+        private static final String CATCH_COLUMN_ID = "id";
+        private static final String CATCH_COLUMN_PHOTO = "photo";
+        private static final String CATCH_COLUMN_FISHTYPE = "fishType";
+        private static final String CATCH_COLUMN_FISHLENGTH = "fishLength";
+        private static final String CATCH_COLUMN_FISHWEIGHT = "fishWeight";
+        private static final String CATCH_COLUMN_DESCRIPTION = "description";
+        private static final String CATCH_COLUMN_LONGITUDE = "longitude";
+        private static final String CATCH_COLUMN_LATITUDE = "latitude";
+        private static final int DATABASE_VERSION = 1;
+        private static final String DATABASE_NAME = "Catch.db";
+        private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME+ //Code to create the database
                 " (" +CATCH_COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + //Creates the id column
                 CATCH_COLUMN_PHOTO+ " BLOB ," + //Creates the photo column of type blob, useful for converting images to bytemaps
                 CATCH_COLUMN_FISHTYPE+ " TEXT ," + //Creates the column for fishtype
@@ -102,7 +116,7 @@ public class CatchDB {
             try{
                 db.execSQL(SQL_CREATE_ENTRIES);
             } catch (Exception e){
-                Message.message(context, "something went wrong"+e)
+                Message.message(context, "something went wrong"+e);
             }
         }
 
