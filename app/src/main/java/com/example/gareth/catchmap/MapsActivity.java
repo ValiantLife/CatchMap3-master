@@ -116,6 +116,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else{
             Toast.makeText(this, "User permissions failed", Toast.LENGTH_SHORT).show();
         }
+        
+        DBhelper = new CatchDB(this);
     }
 
     private void getDeviceLocation(){
